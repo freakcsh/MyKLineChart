@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
             lineDataSetMa.setHighlightEnabled(true);
             lineDataSetMa.setDrawHorizontalHighlightIndicator(false);
             lineDataSetMa.setHighLightColor(Color.WHITE);
-        } else {/*此处必须得写*/
+        } else {/**此处必须得写*/
             lineDataSetMa.setHighlightEnabled(false);
         }
         lineDataSetMa.setDrawValues(false);
@@ -240,7 +240,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    /*设置量表对齐*/
+    /**
+     * 设置量表对齐
+     */
     private void setOffset() {
         float lineLeft = combinedchart.getViewPortHandler().offsetLeft();
         float barLeft = barChart.getViewPortHandler().offsetLeft();
@@ -249,7 +251,7 @@ public class MainActivity extends AppCompatActivity {
         float barBottom = barChart.getViewPortHandler().offsetBottom();
         float offsetLeft, offsetRight;
         float transLeft = 0, transRight = 0;
- /*注：setExtraLeft...函数是针对图表相对位置计算，比如A表offLeftA=20dp,B表offLeftB=30dp,则A.setExtraLeftOffset(10),并不是30，还有注意单位转换*/
+        /**注：setExtraLeft...函数是针对图表相对位置计算，比如A表offLeftA=20dp,B表offLeftB=30dp,则A.setExtraLeftOffset(10),并不是30，还有注意单位转换*/
         if (barLeft < lineLeft) {
            /* offsetLeft = Utils.convertPixelsToDp(lineLeft - barLeft);
             barChart.setExtraLeftOffset(offsetLeft);*/
@@ -259,7 +261,7 @@ public class MainActivity extends AppCompatActivity {
             combinedchart.setExtraLeftOffset(offsetLeft);
             transLeft = barLeft;
         }
-  /*注：setExtraRight...函数是针对图表绝对位置计算，比如A表offRightA=20dp,B表offRightB=30dp,则A.setExtraLeftOffset(30),并不是10，还有注意单位转换*/
+        /**注：setExtraRight...函数是针对图表绝对位置计算，比如A表offRightA=20dp,B表offRightB=30dp,则A.setExtraLeftOffset(30),并不是10，还有注意单位转换*/
         if (barRight < lineRight) {
           /*  offsetRight = Utils.convertPixelsToDp(lineRight);
             barChart.setExtraRightOffset(offsetRight);*/
@@ -273,39 +275,125 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initChart() {
+        /********************************** 以下是条形柱形图的设置 ********************************************/
+        /**
+         * 将边框绘制为true。如果启用此功能，则没有必要绘制x轴和y轴的轴线。
+         */
         barChart.setDrawBorders(true);
+        /**
+         * 设置dp中边框线的宽度。
+         */
         barChart.setBorderWidth(1);
+        /**
+         * 设置图表边框线的颜色。
+         */
         barChart.setBorderColor(getResources().getColor(R.color.minute_grayLine));
+        /**
+         * 设置出现在图表右下角的description text, size = Y-legend文本大小
+         */
         barChart.setDescription("");
+        /**
+         * 将其设置为true以启用对图表的拖动(用手指移动图表)(这不会影响缩放)。
+         */
         barChart.setDragEnabled(true);
         barChart.setScaleYEnabled(false);
-
+        /**
+         * Legend  表示图表图例的类。图例将包含每个颜色和数据集的一个条目。一个数据集中的多个颜色被分组在一起。在将数据设置到图表之前，传奇对象不可用。
+         * getLegend() 返回图表的Legend对象。此方法可用于获取传奇实例，以便自定义自动生成的传奇。
+         */
         Legend barChartLegend = barChart.getLegend();
+        /**
+         * 设置该组件应该被启用(应该被绘制)，则将其设置为true，如果不是，则设置为false。如果禁用，则不会绘制此组件的任何内容。默认值:true
+         */
         barChartLegend.setEnabled(false);
 
         //BarYAxisFormatter  barYAxisFormatter=new BarYAxisFormatter();
         //bar x y轴
+        /**
+         * XAxis 类表示x轴标签设置。只使用setter方法修改它。不要直接访问公共变量。请注意，并不是xlabel类提供的所有特性都适合于RadarChart。
+         */
+        /**
+         * getXAxis() 返回表示所有x-label的对象，此方法可用于获取XAxis对象并对其进行修改(例如更改标签的位置、样式等)。
+         */
         xAxisBar = barChart.getXAxis();
+
+        /**
+         *  setDrawLabels(true) 将其设置为true以启用绘制此轴的标签(这不会影响绘制网格线或轴线)。
+         */
         xAxisBar.setDrawLabels(true);
+        /**
+         * setDrawGridLines() 将其设置为true，以便为该轴绘制网格线。
+         */
         xAxisBar.setDrawGridLines(false);
+        /**
+         * setDrawAxisLine() 设置轴边的线应该画还是不画，则将其设置为true。
+         */
         xAxisBar.setDrawAxisLine(false);
+        /**
+         * 设置x轴标签字体颜色
+         */
         xAxisBar.setTextColor(getResources().getColor(R.color.minute_zhoutv));
+        /**
+         * 设置x标签的位置
+         */
         xAxisBar.setPosition(XAxis.XAxisPosition.BOTTOM);
+        /**
+         * 设置此轴的网格线的颜色(来自每个标签的水平线)。
+         */
         xAxisBar.setGridColor(getResources().getColor(R.color.minute_grayLine));
 
+
+        /**
+         * getAxisLeft() 返回左y轴对象。在水平条形图中，这是上轴。
+         */
         axisLeftBar = barChart.getAxisLeft();
+        /**
+         * 设置此轴的自定义最小值。如果设置此值，则不会根据提供的数据自动计算此值。使用resetAxisMinValue()来撤销它。如果使用此方法，请不要忘记调用setStartAtZero(false)。否则，轴最小值仍将被强制为0。
+         */
         axisLeftBar.setAxisMinValue(0);
+        /**
+         * 将其设置为true，以便为该轴绘制网格线。
+         */
         axisLeftBar.setDrawGridLines(false);
+        /**
+         * setDrawAxisLine() 设置轴边的线应该画还是不画，则将其设置为true。
+         */
         axisLeftBar.setDrawAxisLine(false);
+        /**
+         * 设置左y轴字体颜色
+         */
         axisLeftBar.setTextColor(getResources().getColor(R.color.minute_zhoutv));
+        /**
+         * 将其设置为true以启用绘制此轴的标签(这不会影响绘制网格线或轴线)。
+         */
         axisLeftBar.setDrawLabels(true);
+        /**
+         * 设置最大的轴空间百分比的全部范围。默认10 f
+         */
         axisLeftBar.setSpaceTop(0);
+        /**
+         * 如果启用，ylabel将只显示图表的最小值和最大值。这将忽略 / 覆盖set标签计数。
+         */
         axisLeftBar.setShowOnlyMinMax(true);
+        /**
+         * getAxisRight() 返回右y轴对象。在水平条形图中，这是上轴。
+         */
         axisRightBar = barChart.getAxisRight();
+        /**
+         * 将其设置为true以启用绘制此轴的标签(这不会影响绘制网格线或轴线)。
+         */
         axisRightBar.setDrawLabels(false);
+        /**
+         * 将其设置为true，以便为该轴绘制网格线。
+         */
         axisRightBar.setDrawGridLines(false);
+        /**
+         * setDrawAxisLine() 设置轴边的线应该画还是不画，则将其设置为true。
+         */
         axisRightBar.setDrawAxisLine(false);
-        /****************************************************************/
+
+
+        /******************************* 以下是K线图的设置 *********************************/
         combinedchart.setDrawBorders(true);
         combinedchart.setBorderWidth(1);
         combinedchart.setBorderColor(getResources().getColor(R.color.minute_grayLine));
