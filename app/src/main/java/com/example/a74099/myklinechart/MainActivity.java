@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getOffLineData() {
-           /*方便测试，加入假数据*/
+        /*方便测试，加入假数据*/
         mData = new DataParse();
         JSONObject object = null;
         try {
@@ -249,7 +249,7 @@ public class MainActivity extends AppCompatActivity {
         float barBottom = barChart.getViewPortHandler().offsetBottom();
         float offsetLeft, offsetRight;
         float transLeft = 0, transRight = 0;
- /*注：setExtraLeft...函数是针对图表相对位置计算，比如A表offLeftA=20dp,B表offLeftB=30dp,则A.setExtraLeftOffset(10),并不是30，还有注意单位转换*/
+        /*注：setExtraLeft...函数是针对图表相对位置计算，比如A表offLeftA=20dp,B表offLeftB=30dp,则A.setExtraLeftOffset(10),并不是30，还有注意单位转换*/
         if (barLeft < lineLeft) {
            /* offsetLeft = Utils.convertPixelsToDp(lineLeft - barLeft);
             barChart.setExtraLeftOffset(offsetLeft);*/
@@ -259,7 +259,7 @@ public class MainActivity extends AppCompatActivity {
             combinedchart.setExtraLeftOffset(offsetLeft);
             transLeft = barLeft;
         }
-  /*注：setExtraRight...函数是针对图表绝对位置计算，比如A表offRightA=20dp,B表offRightB=30dp,则A.setExtraLeftOffset(30),并不是10，还有注意单位转换*/
+        /*注：setExtraRight...函数是针对图表绝对位置计算，比如A表offRightA=20dp,B表offRightB=30dp,则A.setExtraLeftOffset(30),并不是10，还有注意单位转换*/
         if (barRight < lineRight) {
           /*  offsetRight = Utils.convertPixelsToDp(lineRight);
             barChart.setExtraRightOffset(offsetRight);*/
@@ -306,46 +306,128 @@ public class MainActivity extends AppCompatActivity {
         axisRightBar.setDrawGridLines(false);
         axisRightBar.setDrawAxisLine(false);
         /****************************************************************/
+
+        /**
+         * 将边界矩形绘制为真。如果这是启用的，那么绘制x轴和y轴的轴线是没有意义的。
+         */
         combinedchart.setDrawBorders(true);
+        /**
+         * 在dp中设置边界线的宽度。
+         */
         combinedchart.setBorderWidth(1);
+        /**
+         * 设置图表边框的颜色。
+         */
         combinedchart.setBorderColor(getResources().getColor(R.color.minute_grayLine));
+        /**
+         * 设置一个描述文本，它出现在图表的右下角，大小=y-图例文本大小
+         */
         combinedchart.setDescription("");
         combinedchart.setDragEnabled(true);
+        /**
+         * 将其设置为true，以支持拖动（用手指移动图表）（这不会影响缩放）。
+         */
         combinedchart.setScaleYEnabled(false);
-
+        /**
+         * Legend 代表图表图例的类。这个图例将包含每个颜色和数据集的一个条目。一个数据集中的多个颜色组合在一起。图例对象在将数据设置到图表之前是不可用的。
+         *
+         * getLegend() 返回图表的图例对象。这个方法可以用来获得图例的实例，以便定制自动生成的图例。
+         */
         Legend combinedchartLegend = combinedchart.getLegend();
+        /**
+         * 如果这个组件应该被启用（应该被绘制），如果不是，则将其设置为true。如果禁用，则不会绘制此组件。默认值:true
+         */
         combinedchartLegend.setEnabled(false);
         //bar x y轴
+        /**
+         * 返回表示所有x标签的对象，此方法可用于获取XAxis对象并对其进行修改（例如，更改标签位置，样式等）
+         */
         xAxisK = combinedchart.getXAxis();
+        /**
+         * 将其设置为true以启用绘制该轴的标签（这不会影响绘制网格线或轴线）。
+         */
         xAxisK.setDrawLabels(true);
+        /**
+         * 将其设置为true以启用绘制该轴的网格线。
+         */
         xAxisK.setDrawGridLines(false);
+        /**
+         * 如果应绘制轴旁边的线条，则将其设置为true。
+         */
         xAxisK.setDrawAxisLine(false);
+        /**
+         * 设置用于标签的文字颜色。 确保在使用资源中的颜色时使用getResources（）.getColor（...）。
+         */
         xAxisK.setTextColor(getResources().getColor(R.color.minute_zhoutv));
+        /**
+         * 设置x标签的位置
+         */
         xAxisK.setPosition(XAxis.XAxisPosition.BOTTOM);
+        /**
+         * 设置此轴网格线的颜色（来自每个标签的水平线）。
+         */
         xAxisK.setGridColor(getResources().getColor(R.color.minute_grayLine));
-
+        /**
+         * 返回左侧的y轴对象。 在水平条形图中，这是顶轴。
+         */
         axisLeftK = combinedchart.getAxisLeft();
+        /**
+         * 将其设置为true以启用绘制该轴的网格线。
+         */
         axisLeftK.setDrawGridLines(true);
+        /**
+         * 如果应绘制轴旁边的线条，则将其设置为true。
+         */
         axisLeftK.setDrawAxisLine(false);
+        /**
+         * 将其设置为true以启用绘制该轴的标签（这不会影响绘制网格线或轴线）。
+         */
         axisLeftK.setDrawLabels(true);
+        /**
+         * 设置用于标签的文字颜色。 确保在使用资源中的颜色时使用getResources（）。getColor（...）。
+         */
         axisLeftK.setTextColor(getResources().getColor(R.color.minute_zhoutv));
+        /**
+         * 设置此轴网格线的颜色（来自每个标签的水平线）。
+         */
         axisLeftK.setGridColor(getResources().getColor(R.color.minute_grayLine));
+        /**
+         * 设置y标签的位置
+         */
         axisLeftK.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
         axisRightK = combinedchart.getAxisRight();
         axisRightK.setDrawLabels(false);
         axisRightK.setDrawGridLines(true);
         axisRightK.setDrawAxisLine(false);
         axisRightK.setGridColor(getResources().getColor(R.color.minute_grayLine));
+        /**
+         * 如果设置为true，则触摸后图表会继续滚动。 默认值：true。
+         */
         combinedchart.setDragDecelerationEnabled(true);
+        /**
+         * 如果设置为true，则触摸后图表会继续滚动。 默认值：true。
+         */
         barChart.setDragDecelerationEnabled(true);
+        /**
+         * 减速摩擦系数在[0; 1]间隔时，较高的值表示速度将缓慢下降，例如，如果设置为0，则会立即停止。 1是一个无效值，将自动转换为0.999f。
+         */
         combinedchart.setDragDecelerationFrictionCoef(0.2f);
+        /**
+         * 减速摩擦系数在[0; 1]间隔时，较高的值表示速度将缓慢下降，例如，如果设置为0，则会立即停止。 1是一个无效值，将自动转换为0.999f。
+         */
         barChart.setDragDecelerationFrictionCoef(0.2f);
 
 
         // 将K线控的滑动事件传递给交易量控件
+        /**
+         * 在图表表面上执行手势时，为自定义回调设置图表的手势监听器。
+         */
         combinedchart.setOnChartGestureListener(new CoupleChartGestureListener(combinedchart, new Chart[]{barChart}));
         // 将交易量控件的滑动事件传递给K线控件
         barChart.setOnChartGestureListener(new CoupleChartGestureListener(barChart, new Chart[]{combinedchart}));
+        /**
+         * 为图表设置一个选择监听器
+         */
         barChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
             @Override
             public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
