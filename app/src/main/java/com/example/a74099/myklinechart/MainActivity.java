@@ -55,12 +55,23 @@ public class MainActivity extends AppCompatActivity {
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
+            /**
+             * 柱形图 标记，指示是否启用y轴上的自动缩放。这对于显示财务数据的图表尤其有趣。
+             */
             barChart.setAutoScaleMinMaxEnabled(true);
+            /**
+             * K线图 标记，指示是否启用y轴上的自动缩放。这对于显示财务数据的图表尤其有趣。
+             */
             combinedchart.setAutoScaleMinMaxEnabled(true);
-
+            /**
+             * 更新数据
+             */
             combinedchart.notifyDataSetChanged();
             barChart.notifyDataSetChanged();
-
+            /**
+             *  invalidate() 整个视图无效。如果视图是可见的，{@link #onDraw(android.graphics.Canvas)}将在将来的某个时候被调用。
+             *  这必须从UI线程调用。要从非ui线程调用，请调用{@link #postInvalidate()}。
+             */
             combinedchart.invalidate();
             barChart.invalidate();
 
@@ -73,12 +84,18 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         combinedchart = findViewById(R.id.combinedchart);
         barChart = findViewById(R.id.barchart);
+        /**
+         * 初始化k线图玉柱形图
+         */
         initChart();
+        /**
+         * 获取离线数据
+         */
         getOffLineData();
     }
 
     private void getOffLineData() {
-        /*方便测试，加入假数据*/
+        /**方便测试，加入假数据*/
         mData = new DataParse();
         JSONObject object = null;
         try {
@@ -86,11 +103,18 @@ public class MainActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        /**
+         * 解析K线图数据
+         */
         mData.parseKLine(object);
-
+        /**
+         * 获取k线图数据
+         */
         mData.getKLineDatas();
 
-
+        /**
+         * 设置k线图数据
+         */
         setData(mData);
     }
 
@@ -98,22 +122,47 @@ public class MainActivity extends AppCompatActivity {
     private LineDataSet setMaLine(int ma, ArrayList<String> xVals, ArrayList<Entry> lineEntries) {
         LineDataSet lineDataSetMa = new LineDataSet(lineEntries, "ma" + ma);
         if (ma == 5) {
+            /**
+             * 设置是否启用高亮
+             */
             lineDataSetMa.setHighlightEnabled(true);
+            /**
+             * 启用/禁用水平高光指示器。如果禁用，则不绘制指示器。
+             */
             lineDataSetMa.setDrawHorizontalHighlightIndicator(false);
             lineDataSetMa.setHighLightColor(Color.WHITE);
         } else {/**此处必须得写*/
             lineDataSetMa.setHighlightEnabled(false);
         }
-        lineDataSetMa.setDrawValues(false);
+        /**
+         * 设置是否绘制连线数据
+         */
+        lineDataSetMa.setDrawValues(true);
+        /**
+         * 设置连线数据颜色
+         */
+        lineDataSetMa.setValueTextColor(Color.WHITE);
         if (ma == 5) {
+            /**
+             * 设置线条颜色
+             */
             lineDataSetMa.setColor(Color.GREEN);
         } else if (ma == 10) {
             lineDataSetMa.setColor(Color.GRAY);
         } else {
-            lineDataSetMa.setColor(Color.YELLOW);
+            lineDataSetMa.setColor(Color.WHITE);
         }
+        /**
+         * 设置线条大小
+         */
         lineDataSetMa.setLineWidth(1f);
-        lineDataSetMa.setDrawCircles(false);
+        /**
+         * 将其设置为true，以便为该数据集绘制圆形指示器，默认为true
+         * 设置为true是，会在节点上绘制一个圆形的指示器
+         */
+        lineDataSetMa.setDrawCircles(true);
+        lineDataSetMa.setDrawCircleHole(true);
+        lineDataSetMa.setCircleColor(Color.BLUE);
         lineDataSetMa.setAxisDependency(YAxis.AxisDependency.LEFT);
         return lineDataSetMa;
     }
@@ -132,8 +181,15 @@ public class MainActivity extends AppCompatActivity {
         return sum;
     }
 
+    /**
+     * 设置k线图数据
+     *
+     * @param mData 假数据对象
+     */
     private void setData(DataParse mData) {
-
+        /**
+         * 获取k线图数据
+         */
         kLineDatas = mData.getKLineDatas();
         int size = kLineDatas.size();   //点的个数
         // axisLeftBar.setAxisMaxValue(mData.getVolmax());
@@ -144,10 +200,15 @@ public class MainActivity extends AppCompatActivity {
         } else if ("亿手".equals(unit)) {
             u = 8;
         }
+        /**
+         * 设置用于格式化轴标签的格式化程序。如果没有设置格式化程序，图表将自动为图表中绘制的所有值确定合理的格式(关于小数)。使用chart.getDefaultValueFormatter()来使用图表计算的格式化程序。
+         */
         axisLeftBar.setValueFormatter(new VolFormatter((int) Math.pow(10, u)));
         // axisRightBar.setAxisMaxValue(mData.getVolmax());
         Log.e("@@@", mData.getVolmax() + "da");
-
+        /**
+         * k线图x轴数据
+         */
         ArrayList<String> xVals = new ArrayList<>();
         ArrayList<BarEntry> barEntries = new ArrayList<>();
         ArrayList<CandleEntry> candleEntries = new ArrayList<>();
@@ -155,11 +216,34 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<Entry> line10Entries = new ArrayList<>();
         ArrayList<Entry> line30Entries = new ArrayList<>();
         for (int i = 0, j = 0; i < mData.getKLineDatas().size(); i++, j++) {
+            //mData.getKLineDatas().get(i).date 日期信息 如：2015-01-28 也就是 x轴的显示数据
+            /**
+             * k线图与柱形图x轴数据
+             * date 日期信息 如：2015-01-08 也就是 x轴的显示数据
+             */
             xVals.add(mData.getKLineDatas().get(i).date + "");
+            /**
+             * 柱形图数据
+             * vol 数据格式如：185103.0
+             * vol 代表柱形图的高度
+             */
             barEntries.add(new BarEntry(mData.getKLineDatas().get(i).vol, i));
+            /**
+             * 蜡烛数据
+             * high 数据格式如：19.25
+             * low 数据格式如：18.36
+             * open 数据格式如 ：19.12
+             * close 数据格式如：19.0
+             */
             candleEntries.add(new CandleEntry(i, mData.getKLineDatas().get(i).high, mData.getKLineDatas().get(i).low, mData.getKLineDatas().get(i).open, mData.getKLineDatas().get(i).close));
             if (i >= 4) {
                 sum = 0;
+                /**
+                 * Entry 一个条目表示图表中的一个条目。
+                 * 参数 ：
+                 * val：y值(条目的实际值)
+                 * i：x值数组中相应的索引(在图的x轴上的索引，不得高于x值字符串数组的长度)
+                 */
                 line5Entries.add(new Entry(getSum(i - 4, i) / 5, i));
             }
             if (i >= 9) {
@@ -172,37 +256,130 @@ public class MainActivity extends AppCompatActivity {
             }
 
         }
+       //TODO /********************************* 以下是柱形图的设置 ***********************************/
+
+        /**
+         * 设置柱形图数据、
+         * BarDataSet(List<BarEntry> yVals, String label) 参数
+         * yVals：柱形图 Y 轴数据
+         * label：标题
+         */
         barDataSet = new BarDataSet(barEntries, "成交量");
+        /**
+         * 以条宽的百分比(0-100)设置条之间的空间
+         */
         barDataSet.setBarSpacePercent(50); //bar空隙
+        /**
+         * 设置是否启动高亮
+         */
         barDataSet.setHighlightEnabled(true);
+        /**
+         * 设置高亮透明度
+         */
         barDataSet.setHighLightAlpha(255);
+        /**
+         * 设置选中时线条的高亮颜色
+         */
         barDataSet.setHighLightColor(Color.WHITE);
-        barDataSet.setDrawValues(false);
-        barDataSet.setColor(Color.RED);
+        /**
+         * 设置是否绘制柱形图 Y 轴数据
+         */
+        barDataSet.setDrawValues(true);
+        /**
+         * 设置绘制的 Y 轴数据颜色
+         */
+        barDataSet.setValueTextColor(Color.WHITE);
+        /**
+         * 设置这个数据集应该使用的唯一颜色。在内部，它重新创建颜色数组并添加指定的颜色。
+         * 设置柱形图图柱子颜色
+         */
+        barDataSet.setColor(Color.parseColor("#00c882"));
+        /**
+         * BarData 适用于所有线、杆、散点、蜡烛和气泡数据。
+         * BarData(List<String> xVals, IBarDataSet dataSet)
+         * 参数：
+         * xVals：x 轴数据
+         * dataSet：Y 轴数据
+         */
         BarData barData = new BarData(xVals, barDataSet);
+        /**
+         * 设置柱形图数据
+         */
         barChart.setData(barData);
+
+        //TODO /******************************************   以下是K线图数据 *****************************************************/
+
+        /**
+         * getViewPortHandler() 返回图表的ViewPortHandler，该视图负责图表的内容区域及其偏移量和维度。
+         *  ViewPortHandler 类，该类包含关于图表当前视图设置的信息，包括偏移量、比例和转换级别……
+         */
         final ViewPortHandler viewPortHandlerBar = barChart.getViewPortHandler();
+        /**
+         * 设置x轴的最大比例因子
+         */
         viewPortHandlerBar.setMaximumScaleX(culcMaxscale(xVals.size()));
         Matrix touchmatrix = viewPortHandlerBar.getMatrixTouch();
         final float xscale = 3;
+        /**
+         * 用指定的比例变换矩阵。M' = S(sx, sy) * M
+         */
         touchmatrix.postScale(xscale, 1f);
 
-
+        /**
+         * CandleDataSet(List<CandleEntry> yVals, String label)
+         * 参数：
+         * yVals：Y 轴数据
+         * label：标题
+         */
         CandleDataSet candleDataSet = new CandleDataSet(candleEntries, "KLine");
-        candleDataSet.setDrawHorizontalHighlightIndicator(false);
+        /**
+         * 启用/禁用水平高光指示器。如果禁用，则不绘制指示器。
+         */
+        candleDataSet.setDrawHorizontalHighlightIndicator(true);
+        /**
+         * 设置是否启用高亮
+         */
         candleDataSet.setHighlightEnabled(true);
+        /**
+         * 设置选中时线条的高亮颜色
+         */
         candleDataSet.setHighLightColor(Color.WHITE);
+        /**
+         * 设置值的字体大小
+         */
         candleDataSet.setValueTextSize(10f);
-        candleDataSet.setDrawValues(false);
-        candleDataSet.setColor(Color.RED);
+        /**
+         * 设置是否绘制数据
+         * 绘制的数据是最大的数据进行四舍五入，只取以为小数，这里去的是 high 字段
+         */
+        candleDataSet.setDrawValues(true);
+        /**
+         * 设置绘制的字体颜色
+         */
+        candleDataSet.setValueTextColor(Color.WHITE);
+        /**
+         * 设置蜡烛显示的颜色
+         */
+        candleDataSet.setColor(Color.parseColor("#e86e42"));
+        /**
+         * 以像素为单位设置蜡烛阴影线的宽度。默认3 f。
+         */
         candleDataSet.setShadowWidth(1f);
+        /**
+         * setAxisDependency(YAxis.AxisDependency.LEFT)：设置依赖关系
+         * YAxis ：表示y轴标签设置及其条目的类。只使用setter方法修改它。不要直接访问公共变量。请注意，并不是ylabel类提供的所有特性都适合于RadarChart。在为图表设置数据之前，需要应用影响axis值范围的自定义。
+         * AxisDependency：指定数据集应该标定的轴的枚举，可以是左的，也可以是右的。
+         */
         candleDataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
+        /**
+         * 设置蜡烛数据
+         */
         CandleData candleData = new CandleData(xVals, candleDataSet);
 
 
         ArrayList<ILineDataSet> sets = new ArrayList<>();
 
-        /******此处修复如果显示的点的个数达不到MA均线的位置所有的点都从0开始计算最小值的问题******************************/
+        /******此处修复如果显示的点的个数达不到 MA 均线的位置所有的点都从0开始计算最小值的问题******************************/
         if (size >= 30) {
             sets.add(setMaLine(5, xVals, line5Entries));
             sets.add(setMaLine(10, xVals, line10Entries));

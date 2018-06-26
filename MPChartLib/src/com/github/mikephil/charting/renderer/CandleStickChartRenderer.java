@@ -2,6 +2,7 @@
 package com.github.mikephil.charting.renderer;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 
 import com.github.mikephil.charting.animation.ChartAnimator;
@@ -177,7 +178,7 @@ public class CandleStickChartRenderer extends LineScatterCandleRadarRenderer {
                 } else if (open < close) {
 
                     if (dataSet.getIncreasingColor() == ColorTemplate.COLOR_NONE) {
-                        mRenderPaint.setColor(dataSet.getColor(j));
+                        mRenderPaint.setColor(Color.BLUE);
                     } else {
                         mRenderPaint.setColor(dataSet.getIncreasingColor());
                     }
