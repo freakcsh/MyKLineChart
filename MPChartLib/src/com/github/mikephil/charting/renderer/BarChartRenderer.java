@@ -84,7 +84,15 @@ public class BarChartRenderer extends DataRenderer {
 
         Transformer trans = mChart.getTransformer(dataSet.getAxisDependency());
 
+        /**
+         * getBarShadowColor()
+         * 返回用于绘制条形阴影的颜色。 条形阴影是表示最大值的条形背后的表面。
+         */
         mShadowPaint.setColor(dataSet.getBarShadowColor());
+        /**
+         * getBarBorderColor()
+         * 返回条纹周围的颜色绘制边框。
+         */
         mBarBorderPaint.setColor(dataSet.getBarBorderColor());
         mBarBorderPaint.setStrokeWidth(Utils.convertDpToPixel(dataSet.getBarBorderWidth()));
 
@@ -106,7 +114,7 @@ public class BarChartRenderer extends DataRenderer {
 
 
 
-        // draw the bar shadow before the values
+        // draw the bar shadow before the values 在值之前绘制条形阴影
         if (mChart.isDrawBarShadowEnabled()) {
 
             for (int j = 0; j < buffer.size(); j += 4) {
@@ -136,7 +144,7 @@ public class BarChartRenderer extends DataRenderer {
 
                 // Set the color for the currently drawn value. If the index
                 // is out of bounds, reuse colors.
-                   /*应网友要求，柱状图加颜色，博主不知道颜色规则，但是代码逻辑上是如此，这里给出的规则是假如成交量上涨，则为红，下跌则为绿*/
+                   /**应网友要求，柱状图加颜色，博主不知道颜色规则，但是代码逻辑上是如此，这里给出的规则是假如成交量上涨，则为红，下跌则为绿*/
                 int i = j / 4;
                 if (i > 0) {
                     if (dataSet.getEntryForIndex(i).getVal() > dataSet.getEntryForIndex(i - 1).getVal()) {
@@ -165,7 +173,20 @@ public class BarChartRenderer extends DataRenderer {
                 if (!mViewPortHandler.isInBoundsRight(buffer.buffer[j]))
                     break;
 
-                mRenderPaint.setColor(dataSet.getColor(j / 4));
+//                mRenderPaint.setColor(dataSet.getColor(j / 4));
+                /**
+                 * 不管是否设置了多个颜色，都使用不同的颜色显示涨跌
+                 */
+                int i = j / 4;
+                if (i > 0) {
+                    if (dataSet.getEntryForIndex(i).getVal() > dataSet.getEntryForIndex(i - 1).getVal()) {
+//                        mRenderPaint.setColor(Color.RED);
+                        mRenderPaint.setColor(Color.parseColor("#00c882"));
+                    } else {
+//                        mRenderPaint.setColor(Color.GREEN);
+                        mRenderPaint.setColor(Color.parseColor("#e86e42"));
+                    }
+                }
                 /*重写柱状图宽度*/
                 c.drawRect(buffer.buffer[j], buffer.buffer[j + 1], buffer.buffer[j + 2],
                         buffer.buffer[j + 3], mRenderPaint);

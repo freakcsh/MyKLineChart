@@ -48,12 +48,14 @@ public class RealmCandleDataSet<T extends RealmObject> extends RealmLineScatterC
     /**
      * paint style when open < close
      * increasing candlesticks are traditionally hollow
+     * 空心得矩形
      */
     protected Paint.Style mIncreasingPaintStyle = Paint.Style.STROKE;
 
     /**
      * paint style when open > close
      * descreasing candlesticks are traditionally filled
+     * 用这种风格绘制的几何图形和文字将被填充，忽略绘画中所有与笔画相关的设置。
      */
     protected Paint.Style mDecreasingPaintStyle = Paint.Style.FILL;
 

@@ -18,6 +18,7 @@ import java.util.List;
 
 /**
  * Renderer class that is responsible for rendering multiple different data-types.
+ * 渲染器类负责呈现多种不同的数据类型。
  */
 public class CombinedChartRenderer extends DataRenderer {
 

@@ -160,8 +160,14 @@ public class MainActivity extends AppCompatActivity {
          * 将其设置为true，以便为该数据集绘制圆形指示器，默认为true
          * 设置为true是，会在节点上绘制一个圆形的指示器
          */
-        lineDataSetMa.setDrawCircles(true);
-        lineDataSetMa.setDrawCircleHole(true);
+        lineDataSetMa.setDrawCircles(false);
+        /**
+         * 是否启用外圆，也就是环形样式
+         */
+        lineDataSetMa.setDrawCircleHole(false);
+        /**
+         * 设置圆形颜色
+         */
         lineDataSetMa.setCircleColor(Color.BLUE);
         lineDataSetMa.setAxisDependency(YAxis.AxisDependency.LEFT);
         return lineDataSetMa;
@@ -398,12 +404,27 @@ public class MainActivity extends AppCompatActivity {
         combinedData.setData(lineData);
         combinedchart.setData(combinedData);
         combinedchart.moveViewToX(mData.getKLineDatas().size() - 1);
+        /**
+         * getViewPortHandler()
+         * 返回图表的ViewPortHandler，该图表负责图表的内容区域及其偏移量和维度。
+         */
         final ViewPortHandler viewPortHandlerCombin = combinedchart.getViewPortHandler();
+        /**
+         * 设置x轴的最大比例因子
+         */
         viewPortHandlerCombin.setMaximumScaleX(culcMaxscale(xVals.size()));
+        /**
+         * 返回用于平移和缩放的图表触摸矩阵。
+         */
         Matrix matrixCombin = viewPortHandlerCombin.getMatrixTouch();
         final float xscaleCombin = 3;
+        /**
+         * 使用指定的比例后矩阵。 M'= S（sx，sy）* M
+         */
         matrixCombin.postScale(xscaleCombin, 1f);
-
+        /**
+         * 将当前视口的左侧移动到指定的x-index。 这也通过调用invalidate（）来刷新图表。
+         */
         combinedchart.moveViewToX(mData.getKLineDatas().size() - 1);
         barChart.moveViewToX(mData.getKLineDatas().size() - 1);
         setOffset();

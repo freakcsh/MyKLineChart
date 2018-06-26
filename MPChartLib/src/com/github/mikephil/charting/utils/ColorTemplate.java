@@ -18,6 +18,7 @@ public class ColorTemplate {
 
     /**
      * an "invalid" color that indicates that no color is set
+     * 指示没有设置颜色的“无效”颜色 透明色
      */
     public static final int COLOR_NONE = 0x00112233;
 

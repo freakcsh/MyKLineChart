@@ -27,7 +27,7 @@ public class DataParse {
         if (date.length() == 0) {
             return;
         }
-/*数据解析依照自己需求来定，如果服务器直接返回百分比数据，则不需要客户端进行计算*/
+/**数据解析依照自己需求来定，如果服务器直接返回百分比数据，则不需要客户端进行计算*/
         baseValue = (float) object.optJSONObject("data").optJSONObject(code).optJSONObject("qt").optJSONArray(code).optDouble(4);
         int count = jsonArray.length();
         for (int i = 0; i < count; i++) {
